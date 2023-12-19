@@ -5,7 +5,13 @@ RUN apt update
 # Install Python and pip
 RUN apt-get install -y python3 python3-pip
 
+RUN apt-get -y install git
+
 RUN apt update
+
+RUN git clone https://github.com/gustavozantut/png_live_displayer.git/ /app/png_live_displayer/
+
+WORKDIR /app/png_live_displayer/app
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libgstreamer1.0-dev\
 									libgstreamer-plugins-base1.0-dev\
@@ -25,10 +31,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libgstreamer1.0-dev\
 RUN apt update
 
 RUN pkg-config --cflags --libs gstreamer-1.0
-
-RUN git clone https://github.com/gustavozantut/png_live_displayer.git/ /app/png_live_displayer/
-
-WORKDIR /app/png_live_displayer/app
 
 ENV DISPLAY=host.docker.internal:0
 
