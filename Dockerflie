@@ -30,6 +30,6 @@ WORKDIR /app
 COPY . /app
 ENV RUN_NAME = 20231218053245745784
 ENV DISPLAY=host.docker.internal:0
-CMD ["python3", "/app/your_script.py"]
+CMD ["python3", "/app/display_png.py"]
 #run
 #docker build -t guhzantut/yolov5_live_gst:latest . ; docker run --ipc=host --gpus all -it -v toll_runs:/runs --rm -e RUN_NAME=20231218053245745784 guhzantut/yolov5_live_gst:latest
