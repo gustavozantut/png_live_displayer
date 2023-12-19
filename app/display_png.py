@@ -1,12 +1,28 @@
 import os
+import re
 import time
+import subprocess
 from pathlib import Path
 from shutil import copyfile
+
+def execute_gst_command(file_path):
+    command = [
+        "/bin/bash",
+        "-c",
+        f"gst-launch-1.0 -e multifilesrc location=\"{file_path}\" index=0 caps=\"image/png,framerate=1/100,width=640,height=480\" loop=false ! pngdec ! videorate ! autovideosink sync=false"
+    ]
+    subprocess.run(command)
+    
+def replace_log_filenames(input_string):
+    pattern = re.compile(r'_[0-9]+\.log')
+    output_string = re.sub(pattern, '.png', input_string)
+    return output_string
 
 def main():
 
     detect_dir = Path("/detect")
     old_det_dir = detect_dir / "old"
+    logs_dir = Path("/logs")
 
     while not [
         item
@@ -27,23 +43,28 @@ def main():
     )[0].name
 
     frames_dir = detect_dir / latest_detection / "frames"
-    stream_frames_dir = frames_dir / "frames_stream"
-    os.makedirs(stream_frames_dir, exist_ok=True)
+    frames_with_plates_det_dir = frames_dir / "plates_displayed"
+    os.makedirs(frames_with_plates_det_dir, exist_ok=True)
 
-    while not os.path.exists(stream_frames_dir):
+    while not os.path.exists(frames_with_plates_det_dir):
         time.sleep(0.5)
 
     while True:
         
         try:
         
-            for filename in sorted(os.listdir(frames_dir)):
+            for folder_name, subfolders, files in os.walk(logs_dir / latest_detection / "posted_plates"):
                 
-                frame_count = len([filename for filename in os.listdir(stream_frames_dir)]) or 0
-                copyfile(frames_dir / filename, stream_frames_dir / f"frame_{frame_count}.png")
-                frame_count += 1
+                for filename in sorted(files):
+                    
+                    if filename not in os.listdir(frames_with_plates_det_dir):
+                    
+                        filename = replace_log_filenames(filename)
+                        file_path = os.path.join(frames_dir, filename)
+                        execute_gst_command(file_path)
+                        copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
                 
-            time.sleep(0.5)
+            time.sleep(1)
         
         except:
             
