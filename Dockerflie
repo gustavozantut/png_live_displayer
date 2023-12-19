@@ -26,10 +26,12 @@ RUN apt update
 
 RUN pkg-config --cflags --libs gstreamer-1.0
 
-WORKDIR /app
-COPY . /app
-ENV RUN_NAME = 20231218053245745784
+RUN git clone https://github.com/gustavozantut/png_live_displayer.git/ /app/png_live_displayer/
+
+WORKDIR /app/png_live_displayer/app
+
 ENV DISPLAY=host.docker.internal:0
-CMD ["python3", "/app/display_png.py"]
+
+CMD ["python3", "/app/png_live_displayer/app/display_png.py"]
 #run
 #docker build -t guhzantut/yolov5_live_gst:latest . ; docker run --ipc=host --gpus all -it -v toll_runs:/runs --rm -e RUN_NAME=20231218053245745784 guhzantut/yolov5_live_gst:latest
