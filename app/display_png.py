@@ -9,7 +9,7 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 playbin uri=file://{file_path} --eos-on-shutdown"
+        f"gst-launch-1.0 playbin uri=file://{file_path} --eos-on-shutdown && sleep 1"
     ]
     subprocess.run(command)
     
