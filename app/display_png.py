@@ -9,7 +9,7 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -e multifilesrc location=\"{file_path}\" index=0 caps=\"image/png,framerate=1/100,width=640,height=480\" loop=false ! pngdec ! videorate ! autovideosink sync=false"
+        f"gst-launch-1.0 playbin uri=file://{file_path} --eos-on-shutdown"
     ]
     subprocess.run(command)
     
