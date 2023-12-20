@@ -9,7 +9,7 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -e multifilesrc location=\"{file_path}\" index=0 caps=\"image/png,framerate=1/100,width=640,height=480\" loop=false ! pngdec ! videorate ! autovideosink sync=false && sleep 0.5"
+        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=1 ! autovideosink"
     ]
     subprocess.run(command)
     
@@ -57,9 +57,10 @@ def main():
                 
                 for filename in sorted(files):
                     
+                    filename = replace_log_filenames(filename)
+                    
                     if filename not in os.listdir(frames_with_plates_det_dir):
                     
-                        filename = replace_log_filenames(filename)
                         file_path = os.path.join(frames_dir, filename)
                         execute_gst_command(file_path)
                         copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
