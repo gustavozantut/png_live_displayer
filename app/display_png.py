@@ -5,7 +5,11 @@ import subprocess
 from pathlib import Path
 from shutil import copyfile
 
+detect_dir = Path("/detect")
+old_det_dir = detect_dir / "old"
+
 def execute_gst_command(file_path):
+    
     command = [
         "/bin/bash",
         "-c",
@@ -14,25 +18,14 @@ def execute_gst_command(file_path):
     subprocess.run(command)
     
 def replace_log_filenames(input_string):
+    
     pattern = re.compile(r'_[0-9]+\.log')
     output_string = re.sub(pattern, '.png', input_string)
     return output_string
 
-def main():
-
-    detect_dir = Path("/detect")
-    old_det_dir = detect_dir / "old"
-    logs_dir = Path("/logs")
-
-    while not [
-        item
-        for item in detect_dir.glob("*")
-        if not os.path.samefile(item, old_det_dir)
-        and not os.path.commonpath([item, old_det_dir]) == old_det_dir
-    ]:
-        time.sleep(0.5)
-
-    latest_detection = sorted(
+def get_latest_detenction_folder_name(detect_dir=detect_dir,old_det_dir=old_det_dir):
+    
+    latest_detenction_folder_name=sorted(
         [item
          for item in detect_dir.glob("*")
          if not os.path.samefile(item, old_det_dir)
@@ -41,7 +34,22 @@ def main():
         key=lambda x: x.stat().st_mtime,
         reverse=True,
     )[0].name
+    return latest_detenction_folder_name
 
+def main():
+
+    logs_dir = Path("/logs")
+
+    while not [
+        item
+        for item in detect_dir.glob("*")
+        if not os.path.samefile(item, old_det_dir)
+        and not os.path.commonpath([item, old_det_dir]) == old_det_dir
+    ]:
+        
+        time.sleep(0.5)
+
+    latest_detection = get_latest_detenction_folder_name()
     frames_dir = detect_dir / latest_detection / "frames"
     frames_with_plates_det_dir = frames_dir / "plates_displayed"
     os.makedirs(frames_with_plates_det_dir, exist_ok=True)
@@ -72,5 +80,6 @@ def main():
             print("no more frames to rename.")
                                     
 if __name__ == "__main__":
+    
     time.sleep(5)
     main()
