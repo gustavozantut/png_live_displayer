@@ -74,7 +74,7 @@ def main():
                         execute_gst_command(file_path)
                         copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
                 
-            time.sleep(1)
+            time.sleep(3)
         
         except:
             
