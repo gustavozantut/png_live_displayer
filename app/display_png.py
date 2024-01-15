@@ -13,10 +13,9 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=500 ! autovideosink"
+        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=5000 ! autovideosink"
     ]
     subprocess.run(command)
-    time.sleep(3)
     
 def replace_log_filenames(input_string):
     
@@ -74,7 +73,7 @@ def main():
                         execute_gst_command(file_path)
                         copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
                 
-            time.sleep(3)
+            time.sleep(1)
         
         except:
             
