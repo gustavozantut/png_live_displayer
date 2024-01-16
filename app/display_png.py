@@ -13,10 +13,9 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=5000000 ! autovideosink"
+        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=500 ! autovideosink"
     ]
     subprocess.run(command)
-    time.sleep (3)
     
 def replace_log_filenames(input_string):
     
@@ -48,7 +47,7 @@ def main():
         and not os.path.commonpath([item, old_det_dir]) == old_det_dir
     ]:
         
-        time.sleep(0.5)
+        time.sleep(1)
 
     latest_detection = get_latest_detenction_folder_name()
     frames_dir = detect_dir / latest_detection / "frames"
