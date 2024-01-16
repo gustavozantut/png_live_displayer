@@ -16,6 +16,7 @@ def execute_gst_command(file_path):
         f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=5000 ! autovideosink"
     ]
     subprocess.run(command)
+    time.sleep (3)
     
 def replace_log_filenames(input_string):
     
