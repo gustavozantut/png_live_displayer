@@ -13,7 +13,7 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=50000000 ! autovideosink"
+        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=-1 ! autovideosink"
     ]
     subprocess.run(command)
     
