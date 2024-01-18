@@ -71,6 +71,7 @@ def main():
                     
                         file_path = os.path.join(frames_dir, filename)
                         execute_gst_command(file_path)
+                        time.sleep(10)
                         copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
                 
             time.sleep(1)
