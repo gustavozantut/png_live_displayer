@@ -1,13 +1,13 @@
 FROM ubuntu:20.04
 
-RUN apt update
+RUN apt update --fix-missing
 
 # Install Python and pip
 RUN apt-get install -y python3 python3-pip
 
 RUN apt-get -y install git
 
-RUN apt update
+RUN apt update --fix-missing
 
 RUN git clone https://github.com/gustavozantut/png_live_displayer.git/ /app/png_live_displayer/
 
@@ -28,7 +28,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libgstreamer1.0-dev\
 									gstreamer1.0-gl\
 									gstreamer1.0-gtk3
 
-RUN apt update
+RUN apt update --fix-missing
 
 RUN pkg-config --cflags --libs gstreamer-1.0
 
