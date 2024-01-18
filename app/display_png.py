@@ -13,7 +13,7 @@ def execute_gst_command(file_path):
     command = [
         "/bin/bash",
         "-c",
-        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=20 ! autovideosink"
+        f"gst-launch-1.0 -v filesrc location=\"{file_path}\" ! decodebin ! videoconvert ! imagefreeze num-buffers=-1 ! autovideosink"
     ]
     subprocess.run(command)
     
@@ -47,7 +47,7 @@ def main():
         and not os.path.commonpath([item, old_det_dir]) == old_det_dir
     ]:
         
-        time.sleep(0.5)
+        time.sleep(1)
 
     latest_detection = get_latest_detenction_folder_name()
     frames_dir = detect_dir / latest_detection / "frames"
@@ -71,13 +71,14 @@ def main():
                     
                         file_path = os.path.join(frames_dir, filename)
                         execute_gst_command(file_path)
+                        time.sleep(10)
                         copyfile(frames_dir / filename, frames_with_plates_det_dir / f"{filename}")
                 
             time.sleep(1)
         
         except:
             
-            print("no more frames to rename.")
+            print("no more frames to display.")
                                     
 if __name__ == "__main__":
     
